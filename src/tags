@@ -1,0 +1,89 @@
+	Session.vim	/^nnoremap  $/;"	m
+	Session.vim	/^nnoremap   za$/;"	m
+	Session.vim	/^nnoremap  $/;"	m
+	Session.vim	/^nnoremap  $/;"	m
+	Session.vim	/^map  :NERDTreeToggle$/;"	m
+	Session.vim	/^nnoremap <silent>  :CtrlP$/;"	m
+	Session.vim	/^nnoremap  :q$/;"	m
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+$	Session.vim	/^nnoremap $ <Nop>$/;"	m
+,d	Session.vim	/^nnoremap ,d :tabp$/;"	m
+,ev	Session.vim	/^nnoremap ,ev :vsp $MYVIMRC$/;"	m
+,ez	Session.vim	/^nnoremap ,ez :vsp ~\/.zshrc$/;"	m
+,f	Session.vim	/^nnoremap ,f :tabn$/;"	m
+,n	Session.vim	/^nnoremap ,n :exec &nu==&rnu? "se nu!" : "se rnu!"$/;"	m
+,s	Session.vim	/^nnoremap ,s :mksession$/;"	m
+,sv	Session.vim	/^nnoremap ,sv :source $MYVIMRC$/;"	m
+,t	Session.vim	/^nmap ,t :TagbarToggle$/;"	m
+,w	Session.vim	/^nnoremap ,w :w!$/;"	m
+,zz	Session.vim	/^nnoremap ,zz :set scrolloff=999$/;"	m
+0	Session.vim	/^normal! 0$/;"	m
+035|	Session.vim	/^normal! 035|$/;"	m
+060|	Session.vim	/^normal! 060|$/;"	m
+09|	Session.vim	/^normal! 09|$/;"	m
+<NL>	Session.vim	/^nnoremap <NL> <NL>$/;"	m
+<Plug>NetrwBrowseX	Session.vim	/^nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(expand((exists("g:netrw_gx")? g:netrw_gx : '<cfile>')),netrw#CheckIfRemote())$/;"	m
+<Plug>NetrwBrowseXVis	Session.vim	/^vnoremap <silent> <Plug>NetrwBrowseXVis :call netrw#BrowseXVis()$/;"	m
+AndaJogador	gamefunc.c	/^void AndaJogador(Players *jogador , Chaves *chave){$/;"	f
+AtualizaVisor	imprime.c	/^void AtualizaVisor (Players *jogador, Chaves *chave){$/;"	f
+B	Session.vim	/^nnoremap B ^$/;"	m
+CC	makefile	/^CC =gcc $/;"	m
+CFLAGS	makefile	/^CFLAGS =-I$(IDIR)$/;"	m
+Cwindow	gamefunc.c	/^void Cwindow(){$/;"	f
+DEPS	makefile	/^DEPS = $(patsubst %,$(IDIR)\/%,$(_DEPS)) $/;"	m
+DeletaCaracter	gamefunc.c	/^void  DeletaCaracter(int posy ,int  posx) {$/;"	f
+DropaChave	gamefunc.c	/^void DropaChave (Players *jogador, Chaves *chave) { $/;"	f
+E	Session.vim	/^nnoremap E \$$/;"	m
+GeraVisao	gamefunc.c	/^void GeraVisao(int posy , int posx, ELado lado , char gerado) {$/;"	f
+IDIR	makefile	/^IDIR =..\/include$/;"	m
+ImprimeChave	imprime.c	/^void ImprimeChave (int posy , int posx){$/;"	f
+ImprimeInimigo	imprime.c	/^void ImprimeInimigo(int posy , int posx, ELado lado) { $/;"	f
+ImprimeInimigos	imprime.c	/^void ImprimeInimigos (Inimigos inimigos[]){$/;"	f
+ImprimeJogador	imprime.c	/^void ImprimeJogador(int posy , int posx){$/;"	f
+ImprimeMapa	imprime.c	/^void ImprimeMapa() { $/;"	f
+ImprimeRefens	imprime.c	/^void ImprimeRefens (Refens vecref[]) { $/;"	f
+ImprimeSaida	imprime.c	/^void ImprimeSaida(Chaves *chave){$/;"	f
+Kbhit	gamefunc.c	/^int Kbhit() {$/;"	f
+LDIR	makefile	/^LDIR=..\/lib$/;"	m
+LIBS	makefile	/^LIBS=-lm -lncurses$/;"	m
+LeMapa	gamefunc.c	/^void LeMapa(Players *jogador, Inimigos vecini[], Chaves *chave , Refens vecref[]) {$/;"	f
+LeNome	gamefunc.c	/^void LeNome(Players *jogador) {$/;"	f
+Menu	gamefunc.c	/^void Menu() { $/;"	f
+Message	gamefunc.c	/^void Message (int y , int x , char mensagem[]){$/;"	f
+Morre	gamefunc.c	/^void Morre(Players *jogador, Chaves *chave) {$/;"	f
+NovoJogo	gamefunc.c	/^void NovoJogo() {$/;"	f
+OBJ	makefile	/^OBJ = $(patsubst %,$(ODIR)\/%,$(_OBJ))$/;"	m
+ODIR	makefile	/^ODIR=obj$/;"	m
+Pausado	gamefunc.c	/^void Pausado () {$/;"	f
+Pega	gamefunc.c	/^bool Pega(Players *jogador , Chaves *chave, ELado lado){$/;"	f
+Proximo	gamefunc.c	/^char Proximo(int posy , int posx ,ELado lado) { $/;"	f
+Realmente	gamefunc.c	/^bool Realmente() { $/;"	f
+Recarrega	gamefunc.c	/^void Recarrega(){$/;"	f
+RodandoJogo	gamefunc.c	/^void RodandoJogo(Players *jogador ,Inimigos vecini[] , Refens vecref[] , Chaves *chave) {$/;"	f
+SessionLoad	Session.vim	/^let SessionLoad = 1$/;"	v
+SorteiaDir	gamefunc.c	/^int SorteiaDir() {$/;"	f
+SorteiaPas	gamefunc.c	/^int SorteiaPas() {$/;"	f
+ValidaProximo	inimigos.c	/^bool ValidaProximo(int posy, int posx, ELado lado){$/;"	f
+Visor	imprime.c	/^void Visor(Players *jogador, Chaves *chave) {$/;"	f
+\r	Session.vim	/^nnoremap \\r :RangerChooser$/;"	m
+^	Session.vim	/^nnoremap ^ <Nop>$/;"	m
+_DEPS	makefile	/^_DEPS = game.h$/;"	m
+_OBJ	makefile	/^_OBJ = game.o gamefunc.o imprime.o inimigos.o$/;"	m
+gx	Session.vim	/^nmap gx <Plug>NetrwBrowseX$/;"	m
+gx	Session.vim	/^vmap gx <Plug>NetrwBrowseXVis$/;"	m
+main	game.c	/^int main (int argc, char *argv[]) { $/;"	f
+s:cpo_save	Session.vim	/^let s:cpo_save=&cpo$/;"	v
+s:l	Session.vim	/^let s:l = 16 - ((15 * winheight(0) + 18) \/ 36)$/;"	v
+s:l	Session.vim	/^let s:l = 198 - ((30 * winheight(0) + 18) \/ 36)$/;"	v
+s:l	Session.vim	/^let s:l = 2 - ((1 * winheight(0) + 18) \/ 36)$/;"	v
+s:l	Session.vim	/^let s:l = 29 - ((24 * winheight(0) + 18) \/ 36)$/;"	v
+s:l	Session.vim	/^let s:l = 379 - ((2 * winheight(0) + 18) \/ 36)$/;"	v
+s:so_save	Session.vim	/^let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0$/;"	v
+s:sx	Session.vim	/^let s:sx = expand("<sfile>:p:r")."x.vim"$/;"	v
+s:wipebuf	Session.vim	/^  let s:wipebuf = bufnr('%')$/;"	v
+zt	Session.vim	/^normal! zt$/;"	m
