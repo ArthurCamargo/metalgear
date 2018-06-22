@@ -24,6 +24,8 @@ typedef enum lado {UP = 0 ,DOWN = 1 ,LEFT = 2 ,RIGHT = 3,STOP = 4} ELado;
 #define MAPA1 "MAPA 1" 
 #define ERROR_A "ERROR DE ABERTURA (Pressione qualquer tecla para sair)"
 #define DIGITA_NOME "Digite seu nome : (3 Caracteres)"
+#define PAUSADO "-=Pausado=-"
+#define APAGADO "           "
 
 
 //Caracteres dos Personagens 
@@ -49,7 +51,6 @@ typedef enum lado {UP = 0 ,DOWN = 1 ,LEFT = 2 ,RIGHT = 3,STOP = 4} ELado;
 #define QUANTINI 10
 #define QUANTREF 10
 #define TAMNOME 3
-#define CICLO 1000000
 #define CAMPVIS 3
 //Posicoes do visor
 #define VIDAY 1
@@ -69,7 +70,6 @@ typedef enum lado {UP = 0 ,DOWN = 1 ,LEFT = 2 ,RIGHT = 3,STOP = 4} ELado;
 //Max 
 #define VIDAMAX 3
 #define DARDOMAX 5
-#define PONTOMAX 10000
 
 //Visor strings 
 #define VIDAT "VIDA: "
@@ -101,6 +101,7 @@ typedef struct inimigo {
 	ELado dir; //direcao do inimigo
 	int passos; //quantidade de passos sortiados para ele andar
 	bool vivo; // saber se ele esta acordado ou nao 
+	bool parado; //esta parado ou nao
 }Inimigos;
 
 typedef struct player { 
@@ -183,11 +184,7 @@ void Pausado ();
 
 void MoveInimigos(Inimigos inimigo[]);
 
-int SorteiaPas();
-
-void AndaInimigo(Inimigos *inimigo , Players *jogador, Chaves *chave);
-
-bool ValidoInim(Inimigos *inimigo, Players *jogador, Chaves *chave, ELado lado);
+void SorteiaPas(Inimigos *inimigo);
 
 void Sleep(float temp);
 
@@ -197,16 +194,22 @@ bool ValidaProximo(int posy, int posx, ELado lado);
 
 void GeraVisao(int posy, int posx, ELado lado , char gerado);
 
-int SorteiaDir();
-
-char Atual(int posy , int posx);
-
-bool ValidaAtual(int posy, int posx);
+void SorteiaDir(Inimigos *inimigo);
 
 void MoveInimigo(Inimigos *inimigo);
 
-void Anda(Inimigos *inimigo);
+void Anda(Inimigos inimigos[]);
 
-void ApagaRastro(int posy, int posx, ELado lado);
+void DeletaInimigos(Inimigos inimigo[]);
+
+bool ValidaVisao(int posx , int posy);
+
+void ContaPassos(Inimigos *inimigo);
+
+void Espera (int quantc);
+
+bool Parado (Inimigos *inimigo);
+
+void VerificaVivo(Players *jogador , Chaves *chave);
 #endif
 

@@ -1,14 +1,11 @@
 #include <game.h>
 
 
-
-
-
 void ImprimeJogador(int posy , int posx){
 	mvwaddch(global_janela, posy ,posx , (char) PLAYER_UP);
 	wrefresh(global_janela);
 	}
-void ImprimeInimigo(int posy , int posx, ELado lado ) { 
+void ImprimeInimigo(int posy , int posx, ELado lado) { 
 	switch (lado) {	
 	case UP:
 		mvwaddch(global_janela, posy , posx, ENEMY_UP);	
