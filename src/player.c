@@ -1,7 +1,7 @@
 #include <game.h>
 
 
-void AndaJogador(Players *jogador , Chaves *chave){
+void AndaJogador(Players *jogador , Chaves *chave , Dardos *dardo){
 	keypad(global_janela , TRUE);
 	char ch;
 	ch = wgetch(global_janela);
@@ -11,6 +11,7 @@ void AndaJogador(Players *jogador , Chaves *chave){
 			mvwaddch(global_janela, jogador->posy , jogador->posx , ' ');
 			jogador->posy --;	
 			ImprimeJogador(jogador->posy, jogador->posx);
+			jogador->dir = UP;
 		}
 		break;
 		
@@ -19,6 +20,7 @@ void AndaJogador(Players *jogador , Chaves *chave){
 			mvwaddch(global_janela, jogador->posy , jogador->posx , ' ');
 			jogador->posy ++;	
 			ImprimeJogador(jogador->posy, jogador->posx);
+			jogador->dir = DOWN;
 		}
 		break;
 		
@@ -28,6 +30,7 @@ void AndaJogador(Players *jogador , Chaves *chave){
 			mvwaddch(global_janela, jogador->posy , jogador->posx , ' ');
 			jogador->posx --;	
 			ImprimeJogador(jogador->posy, jogador->posx);
+			jogador->dir = LEFT;
 		}
 		break;
 	
@@ -36,20 +39,27 @@ void AndaJogador(Players *jogador , Chaves *chave){
 			mvwaddch(global_janela, jogador->posy , jogador->posx , ' ');
 			jogador->posx ++;	
 			ImprimeJogador(jogador->posy, jogador->posx);
+			jogador->dir = RIGHT;
 		}
 		break;
 	case 'p':
 		Pausado();
 		break;
-
+	case ' ': 
+		if (jogador->dardos > 0){
+			JogaDardo(jogador , dardo);
+			jogador->dardos -= 1;
+			AtualizaVisor(jogador, chave);
+		}
+		break;
+		
 	case 'u':
 		chave->tem_chave = true;
 		DeletaCaracter(chave->posy, chave->posx[0]);
 		DeletaCaracter(chave->posy, chave->posx[1]);
 		ImprimeSaida(chave);
 		Visor(jogador, chave);
-		break;
-		
+		break; 
 		
 	}
 }
@@ -140,3 +150,75 @@ void VerificaVivo(Players *jogador, Chaves *chave){
 	if((Proximo(jogador->posy, jogador->posx, STOP) == '.'))	
 		Morre(jogador ,chave);
 }
+
+void JogaDardo(Players *jogador , Dardos *dardo) {
+	dardo->existe = true;
+	dardo->andados = 1;
+}
+
+void MoveTiro(Players *jogador , ELado lado,Dardos *dardo ){
+	if(dardo->andados == DARDODIS)	
+		dardo->existe = false;
+	switch(lado){
+		case UP:
+			dardo->posy = jogador->posy - dardo->andados;
+			dardo->posx = jogador->posx;
+			dardo->dir = UP;
+		if (ValidaDardo(dardo)){
+				DeletaCaracter(dardo->posy , dardo->posx);
+				mvwaddch(global_janela, dardo->posy , dardo->posx, DARDO); 
+				DeletaCaracter(dardo->posy , dardo->posy);
+				dardo->andados ++;
+			}
+		break;
+		case DOWN:
+			dardo->posy = jogador->posy + dardo->andados;
+			dardo->posx = jogador->posx;
+			dardo->dir = DOWN;
+			if (ValidaDardo(dardo)){
+				DeletaCaracter(dardo->posy , dardo->posx);
+				mvwaddch(global_janela, dardo->posy , dardo->posx, DARDO); 
+				DeletaCaracter(dardo->posy , dardo->posy);
+				dardo->andados ++;
+			}
+		break;
+		case LEFT:
+			dardo->posy = jogador->posy; 
+			dardo->posx = jogador->posx - dardo->andados;
+			dardo->dir = LEFT;
+			if (ValidaDardo(dardo)){
+				DeletaCaracter(dardo->posy , dardo->posx);
+				mvwaddch(global_janela, dardo->posy , dardo->posx, DARDO); 
+				DeletaCaracter(dardo->posy , dardo->posy);
+				dardo->andados ++;
+			}
+		break;
+		case RIGHT:
+			dardo->posy = jogador->posy;
+			dardo->posx = jogador->posx + dardo->andados; 
+			dardo->dir = RIGHT;
+			if (ValidaDardo(dardo)){
+				DeletaCaracter(dardo->posy , dardo->posx);
+				mvwaddch(global_janela, dardo->posy , dardo->posx, DARDO); 
+				dardo->andados ++;
+			}
+		break;
+	}
+	
+}
+
+bool ValidaDardo(Dardos *dardo){
+	bool retorno = false;
+	if (dardo->existe == false)
+		retorno = false;
+	else
+	if ((Proximo , dardo->posy , dardo->posx , dardo->dir) == NADA	       ||
+	    (Proximo , dardo->posy , dardo->posx , dardo->dir) != ENEMY_UP     ||
+	    (Proximo , dardo->posy , dardo->posx , dardo->dir) !=  ENEMY_DOWN  ||
+		(Proximo , dardo->posy , dardo->posx , dardo->dir) !=  ENEMY_LEFT  ||
+		(Proximo , dardo->posy , dardo->posx , dardo->dir) !=  ENEMY_RIGHT)
+		retorno = true;
+	
+	return retorno;		
+}
+

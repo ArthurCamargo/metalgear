@@ -11,8 +11,8 @@
 #include <unistd.h>
 
 //Variaveis globais 
-int global_contador;
 WINDOW *global_janela;
+int *global_loop;
 
 //ENUM 
 typedef enum lado {UP = 0 ,DOWN = 1 ,LEFT = 2 ,RIGHT = 3,STOP = 4} ELado;
@@ -39,19 +39,19 @@ typedef enum lado {UP = 0 ,DOWN = 1 ,LEFT = 2 ,RIGHT = 3,STOP = 4} ELado;
 #define PAREDE '#'
 #define CHAVE1 'o'
 #define CHAVE2 '='
-#define TIROX '-'
-#define TIROY '|' 
 #define SFECHADA '#'
 #define SABERTA 'x'
-#define VIDA ACS_DIAMOND
 #define DARDOV '|'
+#define VIDA ACS_DIAMOND
 #define VISAO '.'
+#define NADA ' '
 
 //Quantidades e Tamanhos 
 #define QUANTINI 10
 #define QUANTREF 10
 #define TAMNOME 3
 #define CAMPVIS 3
+#define DARDODIS 12
 //Posicoes do visor
 #define VIDAY 1
 #define VIDAX 2
@@ -70,7 +70,10 @@ typedef enum lado {UP = 0 ,DOWN = 1 ,LEFT = 2 ,RIGHT = 3,STOP = 4} ELado;
 //Max 
 #define VIDAMAX 3
 #define DARDOMAX 5
-
+//Tempos 
+#define INIMIGOST 6004
+#define DARDOST 6000
+#define INIMIGOSMT 6200
 //Visor strings 
 #define VIDAT "VIDA: "
 #define DARDOT "DARDOS: "
@@ -108,14 +111,21 @@ typedef struct player {
 	int posiniy, posinix;
 	int posy, posx;
 	char nome[3];
-	int speed;
 	int dardos;
 	int vidas;
 	bool ganhou;
 	bool perdeu;
 	int pontos;
 	char proximo;
+	ELado dir;
 	}Players;
+typedef struct dardo {
+	int andados;
+	int posy;
+	int posx;
+	ELado dir;
+	bool existe;
+	}Dardos;
 
 typedef struct chave{
 	int posy , posx[2];
@@ -162,9 +172,9 @@ void ImprimeSaida(Chaves *chave);
 
 void ImprimeInimigos(Inimigos inimigo[]);
 
-void RodandoJogo(Players *jogador , Inimigos inimigos[] , Refens *refen, Chaves *chave);
+void RodandoJogo(Players *jogador , Inimigos inimigos[] , Refens *refen, Chaves *chave , Dardos *dardo);
 
-void AndaJogador(Players *jogador, Chaves *chave); 
+void AndaJogador(Players *jogador, Chaves *chave , Dardos *dardo); 
 
 void Visor(Players *jogador, Chaves *chave);
 
@@ -206,10 +216,14 @@ bool ValidaVisao(int posx , int posy);
 
 void ContaPassos(Inimigos *inimigo);
 
-void Espera (int quantc);
-
 bool Parado (Inimigos *inimigo);
 
 void VerificaVivo(Players *jogador , Chaves *chave);
+
+void JogaDardo(Players *jogador , Dardos *dardo);
+
+void MoveTiro(Players *jogador ,ELado lado , Dardos *dardo);
+
+bool ValidaDardo(Dardos *dardo);
 #endif
 

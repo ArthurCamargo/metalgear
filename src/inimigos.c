@@ -29,7 +29,7 @@ void MoveInimigos(Inimigos inimigos[]){
 void Anda (Inimigos inimigos[]){
 	int i;
 	for (i = 0; i < QUANTINI; i++){
-		if(ValidaProximo(inimigos[i].posy, inimigos[i].posx, inimigos[i].dir) && (Parado(&inimigos[i]))){
+		if(ValidaProximo(inimigos[i].posy, inimigos[i].posx, inimigos[i].dir) && (!Parado(&inimigos[i]))){
 			switch(inimigos[i].dir){
 				case UP:
 					inimigos[i].posy -= 1;		
@@ -43,18 +43,9 @@ void Anda (Inimigos inimigos[]){
 				case RIGHT:
 					inimigos[i].posx += 1;		
 					break;
-				default:
-					break;
 			}
 		}
 	}
-}
-
-void Espera(int quantc){
-	quantc = 1;
-	while(global_contador%quantc != 0)
-	global_contador ++;
-	global_contador = 0;	
 }
 
 void ContaPassos(Inimigos *inimigo){
@@ -119,7 +110,7 @@ void GeraVisao(int posy , int posx, ELado lado , char gerado){
 						
 				}
 					
-				if(ValidaVisao(posgy, posgx)){
+				if(!ValidaVisao(posgy, posgx)){
 						j = CAMPVIS;
 				}
 				else 
@@ -135,9 +126,14 @@ void GeraVisao(int posy , int posx, ELado lado , char gerado){
 
 bool ValidaVisao(int posy, int posx){
 	bool retorno = false;
-	if ((Proximo(posy,posx,STOP) != ' '))
-		if((Proximo(posy,posx,STOP) != '.'))
-			if((Proximo(posy,posx,STOP) != 'o'))
+	if ((Proximo(posy,posx,STOP) == ' '))
+			retorno = true;
+	if((Proximo(posy,posx,STOP) == '.'))
+			retorno = true;
+	if((Proximo(posy,posx,STOP) == 'o'))
+		if((Proximo(posy, posx + 1, STOP) == '='))
+			retorno = false;
+		else
 			retorno = true;
 	return retorno;
 	}
@@ -152,3 +148,5 @@ bool Parado(Inimigos *inimigos){
 	
 	return retorno;
 }
+
+

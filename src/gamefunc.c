@@ -84,6 +84,8 @@ void NovoJogo() {
 	jogador.dardos = 5;
 	jogador.pontos = 0;
 
+	Dardos dardo;
+	dardo.existe = false;
 	Chaves chave; // Cria a chave 
 	chave.tem_chave = false;
 	Inimigos inimigos[QUANTINI];  /* Cria uma matriz de inimigos para colocar na fase */
@@ -96,18 +98,17 @@ void NovoJogo() {
 	ImprimeSaida(&chave);
 	ImprimeJogador(jogador.posy, jogador.posx); //imprime o jogador no local apresentado no mapa 
 	
-	ImprimeInimigos(inimigos);
+	//ImprimeInimigos(inimigos);
 	//DeletaInimigos(inimigos);
+
 	ImprimeRefens(refens); // imprime os refens nos locais lidos no mapa ImprimeChave(&chave);
 	ImprimeChave(chave.posy , chave.posx[0]);// imprime a chave no local lido no mapa
 	Visor(&jogador, &chave);
-	RodandoJogo(&jogador, inimigos, refens, &chave);
-
+	RodandoJogo(&jogador, inimigos, refens, &chave , &dardo);
 }
 
-void LeMapa(Players *jogador, Inimigos vecini[], Chaves *chave , Refens vecref[]) {
-	int contini=0 , contref = 0;// Contador de inimigos e refens 
-	int numini = 0 , numref = 0;
+void LeMapa(Players *jogador, Inimigos inimigos[], Chaves *chave , Refens refens[]) {
+	int contini = 0 , contref = 0;// Contador de inimigos e refens 
 	int linha = CSHIFT, coluna = YSHIFT ; //linha e coluna dos inimigos
 	char ch; // variavel para pegar os char no mapa 1 a 1;
 	FILE *arq;
@@ -124,10 +125,9 @@ void LeMapa(Players *jogador, Inimigos vecini[], Chaves *chave , Refens vecref[]
 				linha = CSHIFT;
 				}
 			if (ch == '@'){	
-				vecini[contini].posx = linha; 
-				vecini[contini].posy = coluna; 
+				inimigos[contini].posx = linha; 
+				inimigos[contini].posy = coluna; 
 				contini ++;
-				numini ++;
 			}
 			if (ch == 'k'){
 				chave->posx[0]  = linha;	
@@ -135,10 +135,9 @@ void LeMapa(Players *jogador, Inimigos vecini[], Chaves *chave , Refens vecref[]
 				chave->posy = coluna;
 			}		
 			if (ch == '0'){
-				vecref[contref].posx = linha;
-				vecref[contref].posy = coluna;
+				refens[contref].posx = linha;
+				refens[contref].posy = coluna;
 				contref++;
-				numref ++;
 			}
 			if (ch == 'o'){
 				jogador->posx = linha;
@@ -156,15 +155,22 @@ void LeMapa(Players *jogador, Inimigos vecini[], Chaves *chave , Refens vecref[]
 }
 
 
-void RodandoJogo(Players *jogador ,Inimigos inimigos[] , Refens refens[] , Chaves *chave) {
+void RodandoJogo(Players *jogador ,Inimigos inimigos[] , Refens refens[] , Chaves *chave , Dardos *dardo) {
 	nodelay(global_janela, TRUE);
+	*global_loop = 0;
 	while(!jogador->ganhou && !jogador->perdeu){
-		AndaJogador(jogador, chave);
-
+		AndaJogador(jogador, chave , dardo);
+		
 		while (!Kbhit()){
-			usleep(120000);
-			MoveInimigos(inimigos);
+			if (*global_loop % INIMIGOST == 0){
+				MoveInimigos(inimigos);
+			}
+			if (dardo->existe == true){
+				MoveTiro(jogador, jogador->dir, dardo);
+			}
 			VerificaVivo(jogador, chave);
+			//VerificaInim(inimigos);
+			*global_loop += 1; 
 		}
 	}
 }
