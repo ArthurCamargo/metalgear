@@ -10,7 +10,7 @@ LIBS=-lm -lncurses
 _DEPS = game.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS)) 
 
-_OBJ = game.o gamefunc.o imprime.o inimigos.o
+_OBJ = game.o gamefunc.o imprime.o inimigos.o player.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.c $(DEPS)

@@ -1,9 +1,5 @@
 #include <game.h> 
 	
-
-	
-	
-
 bool ValidaProximo(int posy, int posx, ELado lado){
 	bool retorno;
 	char ch;
@@ -22,58 +18,40 @@ bool ValidaProximo(int posy, int posx, ELado lado){
 
 	return retorno;
 }
-bool ValidaAtual(int posy, int posx){
-	bool retorno;
-	if (Atual(posy, posx) == ' ')
-		retorno = true;
-	else 
-		retorno = false;
-	return retorno;
-}
 	
-void MoveInimigo(Inimigos *inimigo){
-	inimigo->dir = SorteiaDir();	
-	inimigo->passos = SorteiaPas();			
-	if (ValidaProximo(inimigo->posx , inimigo->posy , inimigo->dir)){
-		Anda(inimigo);	
-		inimigo->passos -= 1;
-		if (inimigo->passos  == 0){
-			inimigo->dir = SorteiaDir();
-			inimigo->passos = SorteiaPas();
-		}
-	}
-}
+
 void MoveInimigos(Inimigos inimigos[]){
+		DeletaInimigos(inimigos);
+		Anda(inimigos);
+		ImprimeInimigos(inimigos);
+	}
+		
+		
+
+
+
+void Anda (Inimigos inimigos[]){
 	int i;
-	for(i = 0; i < QUANTINI; i ++){
-		MoveInimigo(&inimigos[i]);
+	for (i = 0; i < QUANTINI; i++){
+		if(ValidaProximo(inimigos[i].posy, inimigos[i].posx, inimigos[i].dir)){
+			switch(inimigos[i].dir){
+					case UP:
+					inimigos[i].posy -= 1;		
+					break;
+				case DOWN:
+					inimigos[i].posy += 1;		
+					break;
+				case LEFT:
+					inimigos[i].posx -= 1;		
+					break;
+				case RIGHT:
+					inimigos[i].posx += 1;		
+					break;
+				default:
+					break;
+		
+			}
 		}
-}
-
-
-void Anda (Inimigos *inimigo){
-	GeraVisao(inimigo->posy,inimigo->posx, inimigo->dir, VISAO);
-	switch(inimigo->dir){
-		case UP:
-			inimigo->posy -= 1;		
-			ImprimeInimigo(inimigo->posy , inimigo->posx , inimigo->dir); 
-			break;
-		case DOWN:
-			inimigo->posy += 1;		
-			ImprimeInimigo(inimigo->posy , inimigo->posx , inimigo->dir); 
-			break;
-		case LEFT:
-			ImprimeInimigo(inimigo->posy , inimigo->posx , inimigo->dir); 
-			inimigo->posx -= 1;		
-			ImprimeInimigo(inimigo->posy , inimigo->posx , inimigo->dir); 
-			break;
-		case RIGHT:
-			ImprimeInimigo(inimigo->posy , inimigo->posx , inimigo->dir); 
-			inimigo->posx += 1;		
-			ImprimeInimigo(inimigo->posy , inimigo->posx , inimigo->dir); 
-			break;
-		default:
-			break;
 	}
 }
 
@@ -83,4 +61,71 @@ void Espera(int quantc){
 	global_contador ++;
 	global_contador = 0;	
 }
+
+void ContaPassos(Inimigos *inimigo){
+	if (inimigo->passos == 0){
+		inimigo->dir = SorteiaDir();	
+		inimigo->passos = SorteiaPas();	
+	}
+	else inimigo->passos -=1;
+
+}
+int SorteiaDir() {
+	ELado sorteio;
+	sorteio = rand()%5;
+	return sorteio;
+}
+
+int SorteiaPas() {
+	int passos;
+	passos = rand()%3 + 2;
+	return passos;
+}
+
+void GeraVisao(int posy , int posx, ELado lado , char gerado){
+	int i = 0 , j = 0;
+	int posgy , posgx;
+	while ( i < CAMPVIS){
+		while (j < CAMPVIS){	
+				switch(lado){	
+					case UP:
+						posgy = posy - j;
+						posgx = posx + i - 1;
+						break;
+					case DOWN:
+						posgy = posy + j;	
+						posgx = posx + i - 1;
+						break;
+					case LEFT:
+						posgy = posy + i - 1;	
+						posgx = posx - j;
+						break;
+					case RIGHT:	
+						posgy = posy + i - 1;	
+						posgx = posx + j;
+						break;
+				}
+					
+				if(ValidaVisao(posgy, posgx)){
+						j = CAMPVIS;
+				}
+				else 
+					mvwaddch(global_janela,posgy, posgx, gerado);
+
+				wrefresh(global_janela);
+				j++;
+		}
+	i++;
+	j = 0;
+	}	
+}
+
+bool ValidaVisao(int posy, int posx){
+	bool retorno = false;
+	if ((Proximo(posy,posx , 5) != ' '))
+		if((Proximo(posy, posx, 5) != '.'))
+			retorno = true;
+	return retorno;
+	}
+
 

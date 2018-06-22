@@ -97,6 +97,7 @@ void NovoJogo() {
 	ImprimeJogador(jogador.posy, jogador.posx); //imprime o jogador no local apresentado no mapa 
 	
 	ImprimeInimigos(inimigos);
+	//DeletaInimigos(inimigos);
 	ImprimeRefens(refens); // imprime os refens nos locais lidos no mapa ImprimeChave(&chave);
 	ImprimeChave(chave.posy , chave.posx[0]);// imprime a chave no local lido no mapa
 	Visor(&jogador, &chave);
@@ -155,13 +156,14 @@ void LeMapa(Players *jogador, Inimigos vecini[], Chaves *chave , Refens vecref[]
 }
 
 
-void RodandoJogo(Players *jogador ,Inimigos vecini[] , Refens vecref[] , Chaves *chave) {
+void RodandoJogo(Players *jogador ,Inimigos inimigos[] , Refens refens[] , Chaves *chave) {
 	nodelay(global_janela, TRUE);
 	while(!jogador->ganhou && !jogador->perdeu){
 		AndaJogador(jogador, chave);
+
 		while (!Kbhit()){
-			MoveInimigos(vecini);
 			usleep(120000);
+			MoveInimigos(inimigos);
 			
 		}
 	}
@@ -219,6 +221,7 @@ void AndaJogador(Players *jogador , Chaves *chave){
 		ImprimeSaida(chave);
 		Visor(jogador, chave);
 		break;
+		
 		
 	}
 }
@@ -297,14 +300,11 @@ char Proximo(int posy , int posx ,ELado lado) {
 	case RIGHT:
 		ch = mvwinch(global_janela , posy , posx + 1);
 		break;
+	default:
+		ch = mvwinch(global_janela, posy ,posx);
 	}
 	return ch;
 }
-char Atual(int posy , int posx){
-	char ch;
-	ch = mvwinch(global_janela , posy , posx );
-	return ch;
-	}
 
 void LeNome(Players *jogador) {
 
@@ -316,7 +316,7 @@ noecho();
 
 }
 
-void  DeletaCaracter(int posy ,int  posx) {
+void DeletaCaracter(int posy ,int  posx) {
 	mvwaddch(global_janela , posy , posx , ' ');
 	wrefresh(global_janela);
 }
@@ -351,8 +351,11 @@ void Pausado () {
 	
 	while(pausado){
 		ch = wgetch(global_janela);	
-		if (ch == 'p')
+		mvwprintw(global_janela , M_TOPOY , M_MEIOX , PAUSADO);    
+		if (ch == 'p'){
+			mvwprintw(global_janela, M_TOPOY , M_MEIOX , APAGADO);
 			pausado = false;	
+			}
 	}
 }
 
@@ -367,60 +370,4 @@ int Kbhit() {
 		return 0;
 	
 }
-
-int SorteiaDir() {
-	ELado sorteio;
-	sorteio = rand()%5;
-	return sorteio;
-}
-
-int SorteiaPas() {
-	int passos;
-	passos = rand()%3 + 2;
-	return passos;
-}
-
-void GeraVisao(int posy , int posx, ELado lado , char gerado){
-	int i = 0 , j = 0;
-	int posgy , posgx;
-	while ( i < CAMPVIS){
-		while (j < CAMPVIS){	
-				switch(lado){	
-					case UP:
-						posgy = posy - j;
-						posgx = posx + i - 1;
-						break;
-					case DOWN:
-						posgy = posy + j;	
-						posgx = posx + i - 1;
-						break;
-					case LEFT:
-						posgy = posy + i - 1;	
-						posgx = posx - j;
-						break;
-					case RIGHT:	
-						posgy = posy + i - 1;	
-						posgx = posx + j;
-						break;
-				}
-					
-				if(!ValidaAtual(posgy , posgx)){
-					if(!Atual(posy, posx))
-						j = CAMPVIS;
-				}
-				else 
-					mvwaddch(global_janela,posgy, posgx, gerado);
-
-				wrefresh(global_janela);
-				j++;
-		}
-	i++;
-	j = 0;
-	}	
-}
-
-
-
-
-
 	

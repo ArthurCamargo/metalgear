@@ -119,18 +119,16 @@ void ImprimeMapa() {
 void ImprimeInimigos (Inimigos inimigos[]){
 	int i;	
 	for (i = 0; i < QUANTINI; i ++){
-		inimigos[i].dir = SorteiaDir();
-		ImprimeInimigo(inimigos[i].posy , inimigos[i].posx , inimigos[i].dir , VISAO); 
+		ContaPassos(&inimigos[i]);
+		GeraVisao(inimigos[i].posy, inimigos[i].posx, inimigos[i].dir, VISAO);
+		ImprimeInimigo(inimigos[i].posy , inimigos[i].posx , inimigos[i].dir); 
 	}
 }
-
-
-
-		
-		
-		
-			
-		
-		
-		
+void DeletaInimigos (Inimigos inimigos[]){
+	int i;
+	for(i = 0; i < QUANTINI; i++){
+		DeletaCaracter(inimigos[i].posy, inimigos[i].posx);
+		GeraVisao(inimigos[i].posy, inimigos[i].posx, inimigos[i].dir, ' ');
+	}
+}
 

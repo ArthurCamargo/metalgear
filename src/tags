@@ -29,20 +29,24 @@ $	Session.vim	/^nnoremap $ <Nop>$/;"	m
 <NL>	Session.vim	/^nnoremap <NL> <NL>$/;"	m
 <Plug>NetrwBrowseX	Session.vim	/^nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(expand((exists("g:netrw_gx")? g:netrw_gx : '<cfile>')),netrw#CheckIfRemote())$/;"	m
 <Plug>NetrwBrowseXVis	Session.vim	/^vnoremap <silent> <Plug>NetrwBrowseXVis :call netrw#BrowseXVis()$/;"	m
+Anda	inimigos.c	/^void Anda (Inimigos inimigos[]){$/;"	f
 AndaJogador	gamefunc.c	/^void AndaJogador(Players *jogador , Chaves *chave){$/;"	f
 AtualizaVisor	imprime.c	/^void AtualizaVisor (Players *jogador, Chaves *chave){$/;"	f
 B	Session.vim	/^nnoremap B ^$/;"	m
 CC	makefile	/^CC =gcc $/;"	m
 CFLAGS	makefile	/^CFLAGS =-I$(IDIR)$/;"	m
+ContaPassos	inimigos.c	/^void ContaPassos(Inimigos *inimigo){$/;"	f
 Cwindow	gamefunc.c	/^void Cwindow(){$/;"	f
 DEPS	makefile	/^DEPS = $(patsubst %,$(IDIR)\/%,$(_DEPS)) $/;"	m
-DeletaCaracter	gamefunc.c	/^void  DeletaCaracter(int posy ,int  posx) {$/;"	f
+DeletaCaracter	gamefunc.c	/^void DeletaCaracter(int posy ,int  posx) {$/;"	f
+DeletaInimigos	imprime.c	/^void DeletaInimigos (Inimigos inimigos[]){$/;"	f
 DropaChave	gamefunc.c	/^void DropaChave (Players *jogador, Chaves *chave) { $/;"	f
 E	Session.vim	/^nnoremap E \$$/;"	m
-GeraVisao	gamefunc.c	/^void GeraVisao(int posy , int posx, ELado lado , char gerado) {$/;"	f
+Espera	inimigos.c	/^void Espera(int quantc){$/;"	f
+GeraVisao	gamefunc.c	/^void GeraVisao(int posy , int posx, ELado lado , char gerado){$/;"	f
 IDIR	makefile	/^IDIR =..\/include$/;"	m
 ImprimeChave	imprime.c	/^void ImprimeChave (int posy , int posx){$/;"	f
-ImprimeInimigo	imprime.c	/^void ImprimeInimigo(int posy , int posx, ELado lado) { $/;"	f
+ImprimeInimigo	imprime.c	/^void ImprimeInimigo(int posy , int posx, ELado lado ) { $/;"	f
 ImprimeInimigos	imprime.c	/^void ImprimeInimigos (Inimigos inimigos[]){$/;"	f
 ImprimeJogador	imprime.c	/^void ImprimeJogador(int posy , int posx){$/;"	f
 ImprimeMapa	imprime.c	/^void ImprimeMapa() { $/;"	f
@@ -56,6 +60,7 @@ LeNome	gamefunc.c	/^void LeNome(Players *jogador) {$/;"	f
 Menu	gamefunc.c	/^void Menu() { $/;"	f
 Message	gamefunc.c	/^void Message (int y , int x , char mensagem[]){$/;"	f
 Morre	gamefunc.c	/^void Morre(Players *jogador, Chaves *chave) {$/;"	f
+MoveInimigos	inimigos.c	/^void MoveInimigos(Inimigos inimigos[]){$/;"	f
 NovoJogo	gamefunc.c	/^void NovoJogo() {$/;"	f
 OBJ	makefile	/^OBJ = $(patsubst %,$(ODIR)\/%,$(_OBJ))$/;"	m
 ODIR	makefile	/^ODIR=obj$/;"	m
@@ -64,11 +69,12 @@ Pega	gamefunc.c	/^bool Pega(Players *jogador , Chaves *chave, ELado lado){$/;"	f
 Proximo	gamefunc.c	/^char Proximo(int posy , int posx ,ELado lado) { $/;"	f
 Realmente	gamefunc.c	/^bool Realmente() { $/;"	f
 Recarrega	gamefunc.c	/^void Recarrega(){$/;"	f
-RodandoJogo	gamefunc.c	/^void RodandoJogo(Players *jogador ,Inimigos vecini[] , Refens vecref[] , Chaves *chave) {$/;"	f
+RodandoJogo	gamefunc.c	/^void RodandoJogo(Players *jogador ,Inimigos inimigos[] , Refens refens[] , Chaves *chave) {$/;"	f
 SessionLoad	Session.vim	/^let SessionLoad = 1$/;"	v
 SorteiaDir	gamefunc.c	/^int SorteiaDir() {$/;"	f
 SorteiaPas	gamefunc.c	/^int SorteiaPas() {$/;"	f
 ValidaProximo	inimigos.c	/^bool ValidaProximo(int posy, int posx, ELado lado){$/;"	f
+ValidaVisao	gamefunc.c	/^bool ValidaVisao(int posy, int posx){$/;"	f
 Visor	imprime.c	/^void Visor(Players *jogador, Chaves *chave) {$/;"	f
 \r	Session.vim	/^nnoremap \\r :RangerChooser$/;"	m
 ^	Session.vim	/^nnoremap ^ <Nop>$/;"	m
