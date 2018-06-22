@@ -149,4 +149,35 @@ bool Parado(Inimigos *inimigos){
 	return retorno;
 }
 
+bool VerificaIni(Inimigos inimigos[]){
+	int i;
+	for (i = 0; i < QUANTINI; i ++){
+		if(Proximo(inimigos[i].posy, inimigos[i].posx , STOP) == '*'){
+			MorreInim(&inimigos[i]);
+			inimigos[i].vivo = false;
+			return true;
+		}
+		else 
+			return false;
+	}
+}
+
+void MorreInim(Inimigos *inimigo){
+	GeraVisao(inimigo->posy, inimigo->posx, inimigo->dir, NADA);
+	mvwaddch(global_janela, inimigo->posy, inimigo->posx, 'Z');
+ 	inimigo->parado = true;
+}
+void Dorme(Inimigos inimigos[]){ 
+	int i;
+	for (i = 0 ; i < QUANTINI; i++){
+		if (!inimigos[i].vivo)
+			mvwaddch(global_janela, inimigos[i].posy, inimigos[i].posx, 'Z');
+	}
+}
+void Vive (Inimigos inimigos[]){
+	int i;
+	for (i = 0; i < QUANTINI; i++){
+			inimigos[i].vivo = true;
+	}
+}
 

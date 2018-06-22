@@ -60,6 +60,9 @@ void AndaJogador(Players *jogador , Chaves *chave , Dardos *dardo){
 		ImprimeSaida(chave);
 		Visor(jogador, chave);
 		break; 
+	case 'k':
+		jogador->dardos += 5;
+		break;
 		
 	}
 }
@@ -152,55 +155,78 @@ void VerificaVivo(Players *jogador, Chaves *chave){
 }
 
 void JogaDardo(Players *jogador , Dardos *dardo) {
-	dardo->existe = true;
-	dardo->andados = 1;
-}
-
-void MoveTiro(Players *jogador , ELado lado,Dardos *dardo ){
-	if(dardo->andados == DARDODIS)	
-		dardo->existe = false;
-	switch(lado){
+	ELado dir;
+	dir = jogador->dir;
+	switch(dir){
 		case UP:
-			dardo->posy = jogador->posy - dardo->andados;
-			dardo->posx = jogador->posx;
-			dardo->dir = UP;
-		if (ValidaDardo(dardo)){
-				DeletaCaracter(dardo->posy , dardo->posx);
-				mvwaddch(global_janela, dardo->posy , dardo->posx, DARDO); 
-				DeletaCaracter(dardo->posy , dardo->posy);
-				dardo->andados ++;
+			if(Proximo(jogador->posy , jogador->posx , UP) == ' '){
+				dardo->posx = jogador->posx;
+				dardo->posy = jogador->posy - 1;
 			}
 		break;
 		case DOWN:
-			dardo->posy = jogador->posy + dardo->andados;
-			dardo->posx = jogador->posx;
-			dardo->dir = DOWN;
-			if (ValidaDardo(dardo)){
-				DeletaCaracter(dardo->posy , dardo->posx);
-				mvwaddch(global_janela, dardo->posy , dardo->posx, DARDO); 
-				DeletaCaracter(dardo->posy , dardo->posy);
-				dardo->andados ++;
+			if(Proximo(jogador->posy , jogador->posx , DOWN) == ' '){
+				dardo->posx = jogador->posx;
+				dardo->posy = jogador->posy + 1;
 			}
 		break;
 		case LEFT:
-			dardo->posy = jogador->posy; 
-			dardo->posx = jogador->posx - dardo->andados;
-			dardo->dir = LEFT;
-			if (ValidaDardo(dardo)){
-				DeletaCaracter(dardo->posy , dardo->posx);
-				mvwaddch(global_janela, dardo->posy , dardo->posx, DARDO); 
-				DeletaCaracter(dardo->posy , dardo->posy);
-				dardo->andados ++;
+			if(Proximo(jogador->posy , jogador->posx , LEFT) == ' '){
+				dardo->posx = jogador->posx - 1;
+				dardo->posy = jogador->posy;
 			}
 		break;
 		case RIGHT:
-			dardo->posy = jogador->posy;
-			dardo->posx = jogador->posx + dardo->andados; 
-			dardo->dir = RIGHT;
-			if (ValidaDardo(dardo)){
-				DeletaCaracter(dardo->posy , dardo->posx);
+			if(Proximo (jogador->posy , jogador->posx , RIGHT) == ' '){
+				dardo->posx = jogador->posx + 1;
+				dardo->posy = jogador->posy;
+			}
+		break;
+	}
+	dardo->existe = true;
+	dardo->andados = 1;
+	dardo->dir = dir;
+}
+
+void MoveTiro(Players *jogador ,Dardos *dardo ){
+	if(dardo->andados == DARDODIS)
+		dardo->existe = false;
+
+	switch(dardo->dir){
+		case UP:
+			if (ValidaDardo){
+				DeletaCaracter(dardo->posy, dardo->posx);
+				dardo->posy = dardo->posy - 1 ;
+				dardo->posx = dardo->posx;
+				dardo->andados += 1;
 				mvwaddch(global_janela, dardo->posy , dardo->posx, DARDO); 
-				dardo->andados ++;
+			}
+			break;
+		case DOWN:
+			if (ValidaDardo){
+				DeletaCaracter(dardo->posy , dardo->posx);
+				dardo->posy = dardo->posy + 1;
+				dardo->posx = dardo->posx;
+				dardo->andados += 1;
+				mvwaddch(global_janela, dardo->posy , dardo->posx, DARDO); 
+			}
+			break;
+		case LEFT:
+			if (ValidaDardo){
+				DeletaCaracter(dardo->posy , dardo->posx);
+				dardo->posy = dardo->posy; 
+				dardo->posx = dardo->posx - 1;
+				dardo->andados += 1;
+				mvwaddch(global_janela, dardo->posy , dardo->posx, DARDO); 
+			}
+			break;
+		case RIGHT:
+			if (ValidaDardo){
+				DeletaCaracter(dardo->posy , dardo->posx);
+				dardo->posy = dardo->posy;
+				dardo->posx = dardo->posx + 1; 
+				dardo->andados += 1;
+				mvwaddch(global_janela, dardo->posy , dardo->posx, DARDO); 
 			}
 		break;
 	}
@@ -208,17 +234,18 @@ void MoveTiro(Players *jogador , ELado lado,Dardos *dardo ){
 }
 
 bool ValidaDardo(Dardos *dardo){
-	bool retorno = false;
-	if (dardo->existe == false)
-		retorno = false;
-	else
-	if ((Proximo , dardo->posy , dardo->posx , dardo->dir) == NADA	       ||
-	    (Proximo , dardo->posy , dardo->posx , dardo->dir) != ENEMY_UP     ||
-	    (Proximo , dardo->posy , dardo->posx , dardo->dir) !=  ENEMY_DOWN  ||
-		(Proximo , dardo->posy , dardo->posx , dardo->dir) !=  ENEMY_LEFT  ||
-		(Proximo , dardo->posy , dardo->posx , dardo->dir) !=  ENEMY_RIGHT)
-		retorno = true;
-	
-	return retorno;		
+	if (Proximo (dardo->posy , dardo->posx , dardo->dir) != NADA &&
+		Proximo (dardo->posy , dardo->posx , dardo->dir) != ENEMY_UP && 	 
+		Proximo (dardo->posy , dardo->posx , dardo->dir) != ENEMY_RIGHT &&	 
+		Proximo (dardo->posy , dardo->posx , dardo->dir) != ENEMY_LEFT &&	 
+		Proximo (dardo->posy , dardo->posx , dardo->dir) != ENEMY_DOWN &&
+		Proximo (dardo->posy , dardo->posx , dardo->dir) != '.'
+	){	
+		dardo->existe = false;
+		return false;
+	}
+	else 
+		return true;
+
 }
 

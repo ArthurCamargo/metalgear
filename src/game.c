@@ -5,6 +5,7 @@
 int main (int argc, char *argv[]) { 
 srand(time(NULL));
 int tempo;
+int tempod;
 global_loop = &tempo;
 
 //Prototipos 

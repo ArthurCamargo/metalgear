@@ -71,9 +71,9 @@ typedef enum lado {UP = 0 ,DOWN = 1 ,LEFT = 2 ,RIGHT = 3,STOP = 4} ELado;
 #define VIDAMAX 3
 #define DARDOMAX 5
 //Tempos 
-#define INIMIGOST 6004
-#define DARDOST 6000
-#define INIMIGOSMT 6200
+#define INIMIGOST 8000
+#define DARDOST 2000
+#define INIMIGOSMT 40000
 //Visor strings 
 #define VIDAT "VIDA: "
 #define DARDOT "DARDOS: "
@@ -222,8 +222,18 @@ void VerificaVivo(Players *jogador , Chaves *chave);
 
 void JogaDardo(Players *jogador , Dardos *dardo);
 
-void MoveTiro(Players *jogador ,ELado lado , Dardos *dardo);
+void MoveTiro(Players *jogador , Dardos *dardo);
 
 bool ValidaDardo(Dardos *dardo);
+
+ELado PegaDirecao(Players *jogador); 
+
+bool VerificaIni(Inimigos inimigos[]);
+
+void MorreInim(Inimigos *inimigo);
+
+void Dorme (Inimigos inimigos[]);
+
+void Vive (Inimigos inimigos[]);
 #endif
 

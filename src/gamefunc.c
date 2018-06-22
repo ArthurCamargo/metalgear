@@ -98,8 +98,9 @@ void NovoJogo() {
 	ImprimeSaida(&chave);
 	ImprimeJogador(jogador.posy, jogador.posx); //imprime o jogador no local apresentado no mapa 
 	
-	//ImprimeInimigos(inimigos);
+	Vive(inimigos);
 	//DeletaInimigos(inimigos);
+
 
 	ImprimeRefens(refens); // imprime os refens nos locais lidos no mapa ImprimeChave(&chave);
 	ImprimeChave(chave.posy , chave.posx[0]);// imprime a chave no local lido no mapa
@@ -158,18 +159,27 @@ void LeMapa(Players *jogador, Inimigos inimigos[], Chaves *chave , Refens refens
 void RodandoJogo(Players *jogador ,Inimigos inimigos[] , Refens refens[] , Chaves *chave , Dardos *dardo) {
 	nodelay(global_janela, TRUE);
 	*global_loop = 0;
+
 	while(!jogador->ganhou && !jogador->perdeu){
 		AndaJogador(jogador, chave , dardo);
-		
 		while (!Kbhit()){
 			if (*global_loop % INIMIGOST == 0){
 				MoveInimigos(inimigos);
 			}
-			if (dardo->existe == true){
-				MoveTiro(jogador, jogador->dir, dardo);
+			if (*global_loop % DARDOST == 0 && dardo->existe == true){
+				MoveTiro(jogador , dardo);
+				ValidaDardo(dardo);
+				if (dardo->existe == false) 
+					DeletaCaracter(dardo->posy, dardo->posx);
 			}
 			VerificaVivo(jogador, chave);
-			//VerificaInim(inimigos);
+			if (VerificaIni(inimigos)){
+				*global_loop = 0;
+				Dorme(inimigos);
+			if (*global_loop % INIMIGOSMT == 0)
+				Vive(inimigos);
+			}
+
 			*global_loop += 1; 
 		}
 	}

@@ -116,9 +116,11 @@ void ImprimeMapa() {
 void ImprimeInimigos (Inimigos inimigos[]){
 	int i;	
 	for (i = 0; i < QUANTINI; i ++){
-		ContaPassos(&inimigos[i]);
-		GeraVisao(inimigos[i].posy, inimigos[i].posx, inimigos[i].dir, VISAO);
-		ImprimeInimigo(inimigos[i].posy , inimigos[i].posx , inimigos[i].dir); 
+		if (inimigos[i].vivo){
+			ContaPassos(&inimigos[i]);
+			GeraVisao(inimigos[i].posy, inimigos[i].posx, inimigos[i].dir, VISAO);
+			ImprimeInimigo(inimigos[i].posy , inimigos[i].posx , inimigos[i].dir); 
+		}
 	}
 }
 void DeletaInimigos (Inimigos inimigos[]){
