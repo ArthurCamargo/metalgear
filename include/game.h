@@ -9,6 +9,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <unistd.h>
+//cabecalho com prototipos e constantes 
 
 //Variaveis globais 
 WINDOW *global_janela;
@@ -164,7 +165,7 @@ void ImprimeChave(int posy , int posx);
 
 void ImprimeJogador(int posy , int posx);  
 
-void ImprimeInimigo (int posy, int posx , ELado lado);
+void ImprimeInimigo (Inimigos *inimigo);
 
 void ImprimeRefens(Refens refens[]);
 

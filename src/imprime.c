@@ -1,26 +1,27 @@
 #include <game.h>
+//Funcoes de imprecao
 
 
 void ImprimeJogador(int posy , int posx){
 	mvwaddch(global_janela, posy ,posx , (char) PLAYER_UP);
 	wrefresh(global_janela);
 	}
-void ImprimeInimigo(int posy , int posx, ELado lado) { 
-	switch (lado) {	
+void ImprimeInimigo(Inimigos *inimigo) { 
+	switch (inimigo->dir) {	
 	case UP:
-		mvwaddch(global_janela, posy , posx, ENEMY_UP);	
+		mvwaddch(global_janela,inimigo->posy ,inimigo->posx, ENEMY_UP);	
 		wrefresh(global_janela); 
 		break;
 	case DOWN:
-		mvwaddch(global_janela, posy  , posx, ENEMY_DOWN);	
+		mvwaddch(global_janela,inimigo->posy  , inimigo->posx, ENEMY_DOWN);	
 		wrefresh(global_janela); 
 		break;
 	case LEFT:
-		mvwaddch(global_janela, posy, posx , ENEMY_LEFT);	
+		mvwaddch(global_janela, inimigo->posy, inimigo->posx , ENEMY_LEFT);	
 		wrefresh(global_janela); 
 		break;
 	case RIGHT:
-		mvwaddch(global_janela, posy, posx , ENEMY_RIGHT);	
+		mvwaddch(global_janela, inimigo->posy, inimigo->posx , ENEMY_RIGHT);	
 		wrefresh(global_janela); 
 		break;
 
@@ -113,21 +114,16 @@ void ImprimeMapa() {
 		}
 }	
 
-void ImprimeInimigos (Inimigos inimigos[]){
-	int i;	
-	for (i = 0; i < QUANTINI; i ++){
-		if (inimigos[i].vivo){
-			ContaPassos(&inimigos[i]);
-			GeraVisao(inimigos[i].posy, inimigos[i].posx, inimigos[i].dir, VISAO);
-			ImprimeInimigo(inimigos[i].posy , inimigos[i].posx , inimigos[i].dir); 
-		}
+void ImprimeInimigos (Inimigos *inimigo){
+		if (inimigo->vivo){
+			ContaPassos(inimigo);
+			GeraVisao(inimigo->posy, inimigo->posx, inimigo->dir, VISAO);
+			ImprimeInimigo(inimigo); 
 	}
 }
-void DeletaInimigos (Inimigos inimigos[]){
-	int i;
-	for(i = 0; i < QUANTINI; i++){
-		DeletaCaracter(inimigos[i].posy, inimigos[i].posx);
-		GeraVisao(inimigos[i].posy, inimigos[i].posx, inimigos[i].dir, ' ');
-	}
+
+void DeletaInimigos (Inimigos *inimigo){
+		DeletaCaracter(inimigo->posy, inimigo->posx);
+		GeraVisao(inimigo->posy, inimigo->posx, inimigo->dir, ' ');
 }
 

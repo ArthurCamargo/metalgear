@@ -1,4 +1,5 @@
 #include <game.h> 
+//funcoes referentes aos inimigos
 	
 bool ValidaProximo(int posy, int posx, ELado lado){
 	bool retorno;
@@ -20,30 +21,28 @@ bool ValidaProximo(int posy, int posx, ELado lado){
 }
 	
 
-void MoveInimigos(Inimigos inimigos[]){
-		DeletaInimigos(inimigos);
-		Anda(inimigos);
-		ImprimeInimigos(inimigos);
+void MoveInimigos(Inimigos *inimigo){
+		DeletaInimigos(inimigo);
+		Anda(inimigo);
+		ImprimeInimigos(inimigo);
 	}
 		
-void Anda (Inimigos inimigos[]){
+void Anda (Inimigos *inimigo){
 	int i;
-	for (i = 0; i < QUANTINI; i++){
-		if(ValidaProximo(inimigos[i].posy, inimigos[i].posx, inimigos[i].dir) && (!Parado(&inimigos[i]))){
-			switch(inimigos[i].dir){
-				case UP:
-					inimigos[i].posy -= 1;		
-					break;
-				case DOWN:
-					inimigos[i].posy += 1;		
-					break;
-				case LEFT:
-					inimigos[i].posx -= 1;		
-					break;
-				case RIGHT:
-					inimigos[i].posx += 1;		
-					break;
-			}
+	if(ValidaProximo(inimigo->posy, inimigo->posx, inimigo->dir) && (!Parado(inimigo))){
+		switch(inimigo->dir){
+			case UP:
+				inimigo->posy -= 1;		
+				break;
+			case DOWN:
+				inimigo->posy += 1;		
+				break;
+			case LEFT:
+				inimigo->posx -= 1;		
+				break;
+			case RIGHT:
+				inimigo->posx += 1;		
+				break;
 		}
 	}
 }

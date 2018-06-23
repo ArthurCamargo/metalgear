@@ -1,11 +1,12 @@
 #include <game.h>
+//funcoes referentes ao jogador
 
-
+//funcao que faz o jogador andar 
 void AndaJogador(Players *jogador , Chaves *chave , Dardos *dardo){
 	keypad(global_janela , TRUE);
 	char ch;
 	ch = wgetch(global_janela);
-	switch(ch){
+	switch(ch){ 
 	case 'w': 	
 		if(Pega(jogador , chave , UP)){	
 			mvwaddch(global_janela, jogador->posy , jogador->posx , ' ');
@@ -42,27 +43,29 @@ void AndaJogador(Players *jogador , Chaves *chave , Dardos *dardo){
 			jogador->dir = RIGHT;
 		}
 		break;
-	case 'p':
+	case 'p': // Pausa o jogo 
 		Pausado();
 		break;
-	case ' ': 
+	case ' ':  // Atira com o dardo 
 		if (jogador->dardos > 0){
 			JogaDardo(jogador , dardo);
 			jogador->dardos -= 1;
 			AtualizaVisor(jogador, chave);
 		}
 		break;
-		
-	case 'u':
-		chave->tem_chave = true;
-		DeletaCaracter(chave->posy, chave->posx[0]);
-		DeletaCaracter(chave->posy, chave->posx[1]);
-		ImprimeSaida(chave);
-		Visor(jogador, chave);
-		break; 
-	case 'k':
-		jogador->dardos += 5;
-		break;
+	//cheat-codes	
+//	case 'u':
+	//pega a chave 
+//		chave->tem_chave = true;
+//		DeletaCaracter(chave->posy, chave->posx[0]);
+//		DeletaCaracter(chave->posy, chave->posx[1]);
+//		ImprimeSaida(chave);
+//		Visor(jogador, chave);
+//		break; 
+    // mais 5 dardos
+//	case 'k':
+//		jogador->dardos += 5;
+//		break;    c
 		
 	}
 }
@@ -71,7 +74,7 @@ bool Pega(Players *jogador , Chaves *chave, ELado lado){
 	bool pode_andar = true;	
 	switch(Proximo(jogador->posy , jogador->posx , lado)){
 			case '%':
-				jogador->dardos += 1;
+				jogador->dardos += 2;
 				Visor(jogador, chave);
 				break;
 			case '0':
@@ -157,44 +160,36 @@ void VerificaVivo(Players *jogador, Chaves *chave){
 void JogaDardo(Players *jogador , Dardos *dardo) {
 	ELado dir;
 	dir = jogador->dir;
-	switch(dir){
+	switch(dir){ // joga o dardo de acordo com a posicao do jogador 
 		case UP:
-			if(Proximo(jogador->posy , jogador->posx , UP) == ' '){
 				dardo->posx = jogador->posx;
 				dardo->posy = jogador->posy - 1;
-			}
 		break;
 		case DOWN:
-			if(Proximo(jogador->posy , jogador->posx , DOWN) == ' '){
 				dardo->posx = jogador->posx;
 				dardo->posy = jogador->posy + 1;
-			}
 		break;
 		case LEFT:
-			if(Proximo(jogador->posy , jogador->posx , LEFT) == ' '){
 				dardo->posx = jogador->posx - 1;
 				dardo->posy = jogador->posy;
-			}
 		break;
 		case RIGHT:
-			if(Proximo (jogador->posy , jogador->posx , RIGHT) == ' '){
 				dardo->posx = jogador->posx + 1;
 				dardo->posy = jogador->posy;
-			}
 		break;
 	}
-	dardo->existe = true;
-	dardo->andados = 1;
-	dardo->dir = dir;
+	dardo->existe = true; //existencia do dardo
+	dardo->andados = 0;  // quantidade de passos dado pelo dardo
+	dardo->dir = dir; //direcao do dardo
 }
 
-void MoveTiro(Players *jogador ,Dardos *dardo ){
+void MoveTiro(Players *jogador ,Dardos *dardo ){ // funcao que move o dardo pelo mapa
 	if(dardo->andados == DARDODIS)
-		dardo->existe = false;
+		dardo->existe = false; // se o dardo for igual a distancia maxima ele deixa de existir
 
-	switch(dardo->dir){
+	switch(dardo->dir){ //Anda com o dardo de acordo com a direcao do mesmo
 		case UP:
-			if (ValidaDardo){
+			if (ValidaDardo(dardo)){
 				DeletaCaracter(dardo->posy, dardo->posx);
 				dardo->posy = dardo->posy - 1 ;
 				dardo->posx = dardo->posx;
@@ -203,7 +198,7 @@ void MoveTiro(Players *jogador ,Dardos *dardo ){
 			}
 			break;
 		case DOWN:
-			if (ValidaDardo){
+			if (ValidaDardo(dardo)){
 				DeletaCaracter(dardo->posy , dardo->posx);
 				dardo->posy = dardo->posy + 1;
 				dardo->posx = dardo->posx;
@@ -212,7 +207,7 @@ void MoveTiro(Players *jogador ,Dardos *dardo ){
 			}
 			break;
 		case LEFT:
-			if (ValidaDardo){
+			if (ValidaDardo(dardo)){
 				DeletaCaracter(dardo->posy , dardo->posx);
 				dardo->posy = dardo->posy; 
 				dardo->posx = dardo->posx - 1;
@@ -221,7 +216,7 @@ void MoveTiro(Players *jogador ,Dardos *dardo ){
 			}
 			break;
 		case RIGHT:
-			if (ValidaDardo){
+			if (ValidaDardo(dardo)){
 				DeletaCaracter(dardo->posy , dardo->posx);
 				dardo->posy = dardo->posy;
 				dardo->posx = dardo->posx + 1; 
@@ -233,14 +228,15 @@ void MoveTiro(Players *jogador ,Dardos *dardo ){
 	
 }
 
-bool ValidaDardo(Dardos *dardo){
-	if (Proximo (dardo->posy , dardo->posx , dardo->dir) != NADA &&
-		Proximo (dardo->posy , dardo->posx , dardo->dir) != ENEMY_UP && 	 
-		Proximo (dardo->posy , dardo->posx , dardo->dir) != ENEMY_RIGHT &&	 
-		Proximo (dardo->posy , dardo->posx , dardo->dir) != ENEMY_LEFT &&	 
-		Proximo (dardo->posy , dardo->posx , dardo->dir) != ENEMY_DOWN &&
-		Proximo (dardo->posy , dardo->posx , dardo->dir) != '.'
-	){	
+bool ValidaDardo(Dardos *dardo){ // Verifica se a proxima posicao do dardo e valida 
+	if (Proximo (dardo->posy , dardo->posx ,  dardo->dir) != NADA && 
+		Proximo (dardo->posy , dardo->posx ,  dardo->dir) != ENEMY_UP && 	 
+		Proximo (dardo->posy , dardo->posx ,  dardo->dir) != ENEMY_RIGHT && 	 
+		Proximo (dardo->posy , dardo->posx ,  dardo->dir) != ENEMY_LEFT  &&	 
+		Proximo (dardo->posy , dardo->posx ,  dardo->dir) != ENEMY_DOWN  && 
+		Proximo (dardo->posy , dardo->posx ,  dardo->dir) != '.'
+	){
+
 		dardo->existe = false;
 		return false;
 	}

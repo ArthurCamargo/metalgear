@@ -5,7 +5,6 @@
 int main (int argc, char *argv[]) { 
 srand(time(NULL));
 int tempo;
-int tempod;
 global_loop = &tempo;
 
 //Prototipos 
@@ -16,7 +15,7 @@ curs_set(false); // Some com o cursor
 start_color(); //Aplica cores ao jogo
 
 
-Menu();
+Menu(); // Abre o Menu do jogo
 
 
 endwin() ; // termina ncurses 

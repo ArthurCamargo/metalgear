@@ -1,24 +1,24 @@
 #include <game.h> 
-
+//Funcoes do jogo em geral
 
 void Cwindow(){
 	int inity;
 	int initx;
-inity = (LINES - ALTURA)/ 2; /* coloca a janela no meio da tela*/
+	inity = (LINES - ALTURA)/ 2; /* coloca a janela no meio da tela*/
 	initx = (COLS - LARGURA)/ 2; /*                              */
 	
-	global_janela = newwin(ALTURA , LARGURA , inity, initx);
-	box(global_janela, 0, 0);
+	global_janela = newwin(ALTURA , LARGURA , inity, initx); //janela global   
+	box(global_janela, 0, 0); //cria uma caixa como janela 
 
 	wrefresh(global_janela);
 
 }
-
+//recarrega a janela do jogo
 void Recarrega(){
 	Cwindow ();
 	wrefresh(global_janela);
 }
-
+//exibe um mensagem em uma nova janela
 void Message (int y , int x , char mensagem[]){
 	Recarrega();
 	mvwprintw(global_janela , y , x , "%s", mensagem);	
@@ -27,7 +27,7 @@ void Message (int y , int x , char mensagem[]){
 }	
 
 
-
+//Pergunta ao usuario se realmente deseja sair do jogo
 bool Realmente() { 
 	char saida;
 	bool retorno= true; //retorno da funcao 
@@ -47,7 +47,7 @@ bool Realmente() {
 	}	
 	return retorno;		
 }	
-
+//Menu do jogo
 void Menu() { 
 
 	char opt; // character das opcoes 
@@ -61,50 +61,57 @@ void Menu() {
 		mvwprintw(global_janela, M_TOPOY , M_MEIOX - strlen(TITULO)/2 , TITULO);				/*Imprime o menu na tela*/
 		mvwprintw(global_janela, M_MEIO_ACIMAY,  M_MEIOX - strlen (NOVOJOGO)/2  ,  NOVOJOGO);
 		mvwprintw(global_janela, M_MEIO_MEIOY,   M_MEIOX - strlen (TOP10)/2  ,  TOP10);
+
 		mvwprintw(global_janela, M_MEIO_ABAIXOY, M_MEIOX - strlen (SAIR)/2 ,  SAIR);               
 		wrefresh(global_janela);
 
-		opt = wgetch(global_janela); //pega um caracter na janela colcada como parametro
+		opt = wgetch(global_janela); //Pega um caracter na janela colcada como parametro
 
 		if(opt == 'n') {
-			NovoJogo(); //comeca um novo jogo 
+			NovoJogo(); //Comeca um novo jogo 
 			continua = true;
 		}
 		if(opt == 't') {
 		}
 		if(opt == 'r') {
-			continua = Realmente(); //pergunta se realmente desja sair
+			continua = Realmente(); //Pergunta se realmente desja sair
 		}
 	}
 }
+//Comeca um novo jogo 
 void NovoJogo() {
-
+	int i;
+	*global_loop = 0; //Coloca o tempo global em 0
 	Players jogador;      /* Cria um jogador com parametros iniciais*/
 	jogador.vidas = 3;
 	jogador.dardos = 5;
 	jogador.pontos = 0;
+	jogador.perdeu = false;
+	jogador.ganhou = false;
 
-	Dardos dardo;
+	Dardos dardo; //Cria uma dardo
 	dardo.existe = false;
 	Chaves chave; // Cria a chave 
-	chave.tem_chave = false;
+	chave.tem_chave = false; 
 	Inimigos inimigos[QUANTINI];  /* Cria uma matriz de inimigos para colocar na fase */
+	for (i = 0; i < QUANTINI; i ++)
+		inimigos[i].passos = 0;
 
 	Refens refens[QUANTREF];  /* Cria uma matriz de refens para colocar na fase */
 
-	LeNome(&jogador); //le o nome do jogador 
-	LeMapa(&jogador , inimigos , &chave, refens); //le a posicao do jogador , inimigos , chave, e refens no mapa) 
-	ImprimeMapa(); //imprime o mapa
+	LeNome(&jogador); //Le o nome do jogador 
+	LeMapa(&jogador , inimigos , &chave, refens); //Le a posicao do jogador , inimigos , chave, e refens no mapa) 
+	ImprimeMapa(); //Imprime o mapa
 	ImprimeSaida(&chave);
 	ImprimeJogador(jogador.posy, jogador.posx); //imprime o jogador no local apresentado no mapa 
-	
-	Vive(inimigos);
-	//DeletaInimigos(inimigos);
-
+	Vive(inimigos); //Certifica que todos os inimigos estarao vivos 
+	for(i = 0; i < QUANTINI; i ++)
+		ImprimeInimigos(&inimigos[i]);
+		wrefresh(global_janela);
 
 	ImprimeRefens(refens); // imprime os refens nos locais lidos no mapa ImprimeChave(&chave);
 	ImprimeChave(chave.posy , chave.posx[0]);// imprime a chave no local lido no mapa
-	Visor(&jogador, &chave);
+	Visor(&jogador, &chave); // imprime a interface 
 	RodandoJogo(&jogador, inimigos, refens, &chave , &dardo);
 }
 
@@ -118,6 +125,7 @@ void LeMapa(Players *jogador, Inimigos inimigos[], Chaves *chave , Refens refens
 		ch =  wgetch(global_janela);
 	}
 	else{
+		rewind(arq);
 		while(!feof(arq)){
 			ch = getc(arq);	
 			linha ++;
@@ -159,12 +167,14 @@ void LeMapa(Players *jogador, Inimigos inimigos[], Chaves *chave , Refens refens
 void RodandoJogo(Players *jogador ,Inimigos inimigos[] , Refens refens[] , Chaves *chave , Dardos *dardo) {
 	nodelay(global_janela, TRUE);
 	*global_loop = 0;
+	int i;
 
 	while(!jogador->ganhou && !jogador->perdeu){
 		AndaJogador(jogador, chave , dardo);
 		while (!Kbhit()){
 			if (*global_loop % INIMIGOST == 0){
-				MoveInimigos(inimigos);
+				for (i = 0; i < QUANTINI; i ++)	
+					MoveInimigos(&inimigos[i]);
 			}
 			if (*global_loop % DARDOST == 0 && dardo->existe == true){
 				MoveTiro(jogador , dardo);
@@ -182,7 +192,7 @@ void RodandoJogo(Players *jogador ,Inimigos inimigos[] , Refens refens[] , Chave
 
 			*global_loop += 1; 
 		}
-	}
+	}	
 }
 char Proximo(int posy , int posx ,ELado lado) { 
 	char ch;
